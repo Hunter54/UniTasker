@@ -3,8 +3,10 @@ package com.ionutv.unitasker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ViewPagerAdapter(supportFragmentManager: FragmentManager): FragmentStatePagerAdapter(supportFragmentManager) {
+class ViewPagerAdapter(supportFragment: Fragment): FragmentStateAdapter(supportFragment) {
 
     private val mFragmentList = ArrayList <Fragment>()
     private val mFragmentTitleList = ArrayList<String>()

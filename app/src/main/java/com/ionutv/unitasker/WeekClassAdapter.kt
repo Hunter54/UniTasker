@@ -15,19 +15,14 @@ class WeekClassAdapter(var classes:ArrayList<Classes>): RecyclerView.Adapter<Wee
         return classes.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_classes,parent,false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
 
-        return ViewHolder(view)
+        LayoutInflater.from(parent.context).inflate(R.layout.item_classes,parent,false)
 
-    }
-
-
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val userClass=classes[position]
-
-        holder.bind(userClass)
+        holder.bind(classes[position])
 
     }
 
