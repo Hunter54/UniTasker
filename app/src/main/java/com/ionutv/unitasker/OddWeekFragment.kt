@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_odd_week.*
 class OddWeekFragment : Fragment() {
 
     private lateinit var binding:FragmentOddWeekBinding
-
+    val userClasses:ArrayList<Classes> =  ArrayList()
     private var selectedPage = 0
 
     companion object{
@@ -34,6 +34,10 @@ class OddWeekFragment : Fragment() {
         super.onCreate(savedInstanceState)
         selectedPage= arguments?.getInt(ARG_SELECTED_WEEK) ?: 0
 
+        userClasses.add(Classes("Operating Systems","Pungila",false,"14:20","035"))
+        userClasses.add(Classes("Programming 3","Pop",false,"18:00","034"))
+        userClasses.add(Classes("English","Ana",true,"19:40","A02"))
+
 
     }
 
@@ -47,10 +51,6 @@ class OddWeekFragment : Fragment() {
 //            else -> "EVEN week"
 //        }
 
-        val userClasses:ArrayList<Classes> =  ArrayList()
-        userClasses.add(Classes("Operating Systems","Pungila",false,"14:20","035"))
-        userClasses.add(Classes("Programming 3","Pop",false,"18:00","034"))
-
         //binding.rvOddclassesList.layoutManager = LinearLayoutManager(this)
         val adapter=WeekClassAdapter(userClasses)
         binding.rvOddclassesList.adapter = adapter
@@ -58,4 +58,9 @@ class OddWeekFragment : Fragment() {
         return binding.root
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+
+    }
 }
