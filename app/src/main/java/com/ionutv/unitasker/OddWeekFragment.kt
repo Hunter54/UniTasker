@@ -17,25 +17,45 @@ class OddWeekFragment : Fragment() {
 
     private lateinit var binding:FragmentOddWeekBinding
 
+    private var selectedPage = 0
+
+    companion object{
+        private const val ARG_SELECTED_WEEK="selectedWeek"
+        fun newInstance(position :Int ): OddWeekFragment{
+            return OddWeekFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_SELECTED_WEEK, position)
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        selectedPage= arguments?.getInt(ARG_SELECTED_WEEK) ?: 0
+
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding= DataBindingUtil.inflate(inflater,R.layout.fragment_odd_week, container, false)
+//        binding.tvweek.text = when (selectedPage){
+//            0 -> "ODD week"
+//            else -> "EVEN week"
+//        }
 
+        val userClasses:ArrayList<Classes> =  ArrayList()
+        userClasses.add(Classes("Operating Systems","Pungila",false,"14:20","035"))
+        userClasses.add(Classes("Programming 3","Pop",false,"18:00","034"))
+
+        //binding.rvOddclassesList.layoutManager = LinearLayoutManager(this)
+        val adapter=WeekClassAdapter(userClasses)
+        binding.rvOddclassesList.adapter = adapter
 
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        val userClasses: ArrayList<Classes> = ArrayList()
-        userClasses.add(Classes("Operating Systems","Pungila",false,"14:20","035"))
-        userClasses.add(Classes("Programming 3","Pop",false,"18:00","034"))
-
-        binding.rvOddclassesList.layoutManager = LinearLayoutManager(context)
-        val adapter=WeekClassAdapter(userClasses)
-        binding.rvOddclassesList.adapter = adapter
-    }
 }

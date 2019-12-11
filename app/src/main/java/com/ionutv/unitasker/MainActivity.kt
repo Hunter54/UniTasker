@@ -3,6 +3,7 @@ package com.ionutv.unitasker
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.tabs.TabLayoutMediator
 import com.ionutv.unitasker.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,16 +15,17 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        createTabs()
+        binding.viewPager.adapter=ViewPagerAdapter(this)
 
-
+        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+            tab.text = when(position){
+                0->"ODD"
+                1->"EVEN"
+                else -> "ODD"
+            }
+        }.attach()
     }
 
-    private fun createTabs(){
-        val adapter=ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(OddWeekFragment(),"ODD")
-        adapter.addFragment(EvenWeekFragment(),"EVEN")
-        viewPager.adapter = adapter
-        tabs.setupWithViewPager(viewPager)
-    }
+
+
 }
