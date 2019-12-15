@@ -1,11 +1,10 @@
 package com.ionutv.unitasker
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ionutv.unitasker.DataClasses.Classes
+import com.ionutv.unitasker.dataClasses.Classes
 import kotlinx.android.synthetic.main.item_classes.view.*
 
 class WeekClassAdapter(var classes:ArrayList<Classes>): RecyclerView.Adapter<WeekClassAdapter.ViewHolder> (){

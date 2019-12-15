@@ -7,10 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.ionutv.unitasker.DataClasses.Classes
+import com.ionutv.unitasker.dataClasses.Classes
 import com.ionutv.unitasker.databinding.FragmentOddWeekBinding
-import kotlinx.android.synthetic.main.fragment_odd_week.*
 
 
 class OddWeekFragment : Fragment() {
