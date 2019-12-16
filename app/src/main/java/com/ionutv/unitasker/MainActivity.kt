@@ -23,30 +23,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        var classesJson: String = ""
-        val moshi: Moshi=Moshi.Builder().build()
-        val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
-        val adapter:JsonAdapter<List<Classes>> = moshi.adapter(listType)
-        try {
-            val inputStream = this.assets.open("odd.json")
-            val size = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.use { it.read(buffer) }
-            classesJson = String(buffer)
-        }
-        catch (ioException: IOException){
-            ioException.printStackTrace()
-        }
-
-        if(classesJson != "") {
-            Log.d("Json Parsing","Entering Json parsing test")
-            val classes = adapter.fromJson(classesJson)
-            classes?.forEach {
-                Log.d("Json Parsing",it.toString())
-            }
-        }
-
-
         binding.viewPager.adapter=ViewPagerAdapter(this)
 
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->

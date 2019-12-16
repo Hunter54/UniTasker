@@ -2,6 +2,7 @@ package com.ionutv.unitasker
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.ionutv.unitasker.dataClasses.Classes
 import com.ionutv.unitasker.databinding.FragmentOddWeekBinding
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import java.io.IOException
 
 
 class OddWeekFragment : Fragment() {
 
     private lateinit var binding:FragmentOddWeekBinding
-    val userClasses:ArrayList<Classes> =  ArrayList()
+    var userClasses:ArrayList<Classes> =  ArrayList()
     private var selectedPage = 0
 
     companion object{
@@ -31,10 +36,39 @@ class OddWeekFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         selectedPage= arguments?.getInt(ARG_SELECTED_WEEK) ?: 0
+        var tabViewed:String
 
-        userClasses.add(Classes("Operating Systems","Pungila",false,"14:20","Monday","034"))
-        userClasses.add(Classes("Programming 3","Pop",false,"18:00","Tuesday","A02"))
-        userClasses.add(Classes("English","Ana",true,"19:40","Monday","035"))
+        if(selectedPage == 0){
+            tabViewed="odd.json"
+        }
+        else{
+            tabViewed="even.json"
+        }
+
+        var classesJson: String = ""
+        val moshi: Moshi = Moshi.Builder().build()
+        val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
+        val adapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
+
+        try {
+            val inputStream = this.context!!.assets.open(tabViewed)
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.use { it.read(buffer) }
+            classesJson = String(buffer)
+        }
+        catch (ioException: IOException){
+            ioException.printStackTrace()
+        }
+
+        if(classesJson != "") {
+            Log.d("Json Parsing","Entering Json parsing test")
+            val classes = adapter.fromJson(classesJson)
+            classes?.forEach {
+                Log.d("Json Parsing", it.toString())
+                userClasses.add(it)
+            }
+        }
 
 
     }
@@ -44,10 +78,6 @@ class OddWeekFragment : Fragment() {
         savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding= DataBindingUtil.inflate(inflater,R.layout.fragment_odd_week, container, false)
-//        binding.tvweek.text = when (selectedPage){
-//            0 -> "ODD week"
-//            else -> "EVEN week"
-//        }
 
         //binding.rvOddclassesList.layoutManager = LinearLayoutManager(this)
         val adapter=WeekClassAdapter(userClasses)
