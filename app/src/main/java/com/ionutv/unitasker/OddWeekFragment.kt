@@ -21,6 +21,10 @@ class OddWeekFragment : Fragment() {
     private lateinit var binding:FragmentOddWeekBinding
     var userClasses:ArrayList<Classes> =  ArrayList()
     private var selectedPage = 0
+    private var tabViewed:String = ""
+    private val moshi: Moshi = Moshi.Builder().build()
+    private val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
+    private val jsonAdapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
 
     companion object{
         private const val ARG_SELECTED_WEEK="selectedWeek"
@@ -36,7 +40,6 @@ class OddWeekFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         selectedPage= arguments?.getInt(ARG_SELECTED_WEEK) ?: 0
-        var tabViewed:String
 
         if(selectedPage == 0){
             tabViewed="odd.json"
@@ -46,9 +49,6 @@ class OddWeekFragment : Fragment() {
         }
 
         var classesJson: String = ""
-        val moshi: Moshi = Moshi.Builder().build()
-        val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
-        val adapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
 
         try {
             val inputStream = this.context!!.assets.open(tabViewed)
@@ -63,7 +63,7 @@ class OddWeekFragment : Fragment() {
 
         if(classesJson != "") {
             Log.d("Json Parsing","Entering Json parsing test")
-            val classes = adapter.fromJson(classesJson)
+            val classes = jsonAdapter.fromJson(classesJson)
             classes?.forEach {
                 Log.d("Json Parsing", it.toString())
                 userClasses.add(it)
@@ -73,15 +73,22 @@ class OddWeekFragment : Fragment() {
 
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding= DataBindingUtil.inflate(inflater,R.layout.fragment_odd_week, container, false)
 
-        //binding.rvOddclassesList.layoutManager = LinearLayoutManager(this)
+
         val adapter=WeekClassAdapter(userClasses)
         binding.rvOddclassesList.adapter = adapter
+
+        userClasses.add(Classes("Marin","ADS",false,"11:20","Friday","035"))
+
+        var jsonString:String = jsonAdapter.toJson(userClasses)
+        adapter.notifyDataSetChanged()
 
         return binding.root
     }

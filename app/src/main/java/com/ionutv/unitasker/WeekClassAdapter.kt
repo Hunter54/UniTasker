@@ -25,6 +25,10 @@ class WeekClassAdapter(var classes:ArrayList<Classes>): RecyclerView.Adapter<Wee
 
     }
 
+    fun refreshDataSet(){
+
+    }
+
     class ViewHolder(view : View): RecyclerView.ViewHolder(view){
 
         private val clas = view.tvclasses
