@@ -32,9 +32,9 @@ class OddWeekFragment : Fragment() {
         super.onCreate(savedInstanceState)
         selectedPage= arguments?.getInt(ARG_SELECTED_WEEK) ?: 0
 
-        userClasses.add(Classes("Operating Systems","Pungila",false,"14:20","035"))
-        userClasses.add(Classes("Programming 3","Pop",false,"18:00","034"))
-        userClasses.add(Classes("English","Ana",true,"19:40","A02"))
+        userClasses.add(Classes("Operating Systems","Pungila",false,"14:20","Monday","034"))
+        userClasses.add(Classes("Programming 3","Pop",false,"18:00","Tuesday","A02"))
+        userClasses.add(Classes("English","Ana",true,"19:40","Monday","035"))
 
 
     }

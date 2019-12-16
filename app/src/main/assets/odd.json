@@ -1,11 +1,10 @@
-{
-  "odd": [
+[
     {
       "professor": "Pungila",
       "name": "Operating Systems",
       "type": false,
       "time": "18:00",
-      " day": "Monday",
+      "day": "Monday",
       "room": "035"
     },
     {
@@ -13,18 +12,7 @@
       "name": "Programming 3",
       "type": false,
       "time": "19:40",
-      " day": "Monday",
+      "day": "Monday",
       "room": "034"
     }
-  ],
-  "even": [
-    {
-      "professor": "Pungila",
-      "name": "Operating Systems",
-      "type": false,
-      "time": "14:20",
-      " day": "Monday",
-      "room": "033"
-    }
-  ]
-}
+]

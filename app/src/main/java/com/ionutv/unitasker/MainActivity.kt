@@ -2,8 +2,10 @@ package com.ionutv.unitasker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.tabs.TabLayoutMediator
+import com.ionutv.unitasker.dataClasses.Classes
 import com.ionutv.unitasker.dataClasses.Data
 import com.ionutv.unitasker.databinding.ActivityMainBinding
 import com.squareup.moshi.JsonAdapter
@@ -21,13 +23,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        val moshi: Moshi=Moshi.Builder().build()
-        val listType = Types.newParameterizedType(List::class.java,Data::class.java)
-        val adapter:JsonAdapter<List<Data>> = moshi.adapter(listType)
-
         var classesJson: String = ""
+        val moshi: Moshi=Moshi.Builder().build()
+        val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
+        val adapter:JsonAdapter<List<Classes>> = moshi.adapter(listType)
         try {
-            val inputStream = this.assets.open("data.json")
+            val inputStream = this.assets.open("odd.json")
             val size = inputStream.available()
             val buffer = ByteArray(size)
             inputStream.use { it.read(buffer) }
@@ -38,8 +39,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         if(classesJson != "") {
-            val data = adapter.fromJson(classesJson)
-
+            Log.d("Json Parsing","Entering Json parsing test")
+            val classes = adapter.fromJson(classesJson)
+            classes?.forEach {
+                Log.d("Json Parsing",it.toString())
+            }
         }
 
 
