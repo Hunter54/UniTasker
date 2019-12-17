@@ -9,25 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.ionutv.unitasker.dataClasses.Classes
-import com.ionutv.unitasker.databinding.FragmentOddWeekBinding
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import java.io.IOException
-import android.R.id.edit
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.Context.MODE_PRIVATE
+import com.ionutv.unitasker.databinding.FragmentWeekBinding
 
 
-class OddWeekFragment : Fragment() {
+class WeekFragment : Fragment() {
 
-    private lateinit var binding: FragmentOddWeekBinding
+    private lateinit var binding: FragmentWeekBinding
     private lateinit var adapter: WeekClassAdapter
     private val CLASS_PREFFERENCE = "class"
     var userClasses: ArrayList<Classes> = ArrayList()
     private var selectedPage = 0
-    private var tabViewed: String = ""
+    private var TAB_VIEWED: String = ""
     private val moshi: Moshi = Moshi.Builder().build()
     private val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
     private val jsonAdapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
@@ -35,8 +33,8 @@ class OddWeekFragment : Fragment() {
 
     companion object {
         private const val ARG_SELECTED_WEEK = "selectedWeek"
-        fun newInstance(position: Int): OddWeekFragment {
-            return OddWeekFragment().apply {
+        fun newInstance(position: Int): WeekFragment {
+            return WeekFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SELECTED_WEEK, position)
                 }
@@ -50,9 +48,9 @@ class OddWeekFragment : Fragment() {
         selectedPage = arguments?.getInt(ARG_SELECTED_WEEK) ?: 0
 
         if (selectedPage == 0) {
-            tabViewed = "odd.json"
+            TAB_VIEWED = "odd.json"
         } else {
-            tabViewed = "even.json"
+            TAB_VIEWED = "even.json"
         }
 
 
@@ -64,24 +62,19 @@ class OddWeekFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_odd_week, container, false)
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_week, container, false)
 
         adapter = WeekClassAdapter(userClasses)
-        binding.rvOddClassesList.adapter = adapter
-
-//        var jsonString: String = jsonAdapter.toJson(userClasses)
-//        saveJson(tabViewed, jsonString)
-
-        adapter.notifyDataSetChanged()
+        loadUserClasses()
+        binding.rvClassesList.adapter = adapter
 
         return binding.root
     }
 
-    var listener: SharedPreferences.OnSharedPreferenceChangeListener =
+    private var listener: SharedPreferences.OnSharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             Log.d("Shared Prefference", "Calling Shared Prefference Change Listener "+key)
-            if (key == tabViewed) {
+            if (key == TAB_VIEWED) {
                 userClasses.clear()
                 loadUserClasses()
                 adapter.notifyDataSetChanged()
@@ -107,7 +100,7 @@ class OddWeekFragment : Fragment() {
     }
 
     private fun loadUserClasses() {
-        val classes = jsonAdapter.fromJson(loadJson(tabViewed, context))
+        val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, context))
         classes?.forEach {
             Log.d("Json Parsing", it.toString())
             userClasses.add(it)

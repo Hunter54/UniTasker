@@ -10,7 +10,7 @@ class ViewPagerAdapter(supportFragment: FragmentActivity): FragmentStateAdapter(
     private val mFragmentTitleList = ArrayList<String>()
 
     override fun createFragment(position: Int): Fragment =
-        OddWeekFragment.newInstance(position)
+        WeekFragment.newInstance(position)
 
     override fun getItemCount(): Int {
         return pageTitle.size

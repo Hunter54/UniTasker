@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
     private val jsonAdapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
     private val CLASS_PREFFERENCE = "class"
+    private val TAB_VIEWED = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                 1->"EVEN"
                 else -> "ODD"
             }
+
         }.attach()
 
         fab.setOnClickListener {
