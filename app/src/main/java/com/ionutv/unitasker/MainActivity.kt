@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private val moshi: Moshi = Moshi.Builder().build()
     private val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
     private val jsonAdapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        binding.viewPager.adapter=ViewPagerAdapter(this)
+        binding.viewPager.adapter = ViewPagerAdapter(this)
 
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
-            tab.text = when(position){
-                0->"ODD"
-                1->"EVEN"
+            tab.text = when (position) {
+                0 -> "ODD"
+                1 -> "EVEN"
                 else -> "ODD"
             }
 
@@ -44,9 +44,9 @@ class MainActivity : AppCompatActivity() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                TAB_VIEWED = when(position){
-                    0->"odd.json"
-                    1->"even.json"
+                TAB_VIEWED = when (position) {
+                    0 -> "odd.json"
+                    1 -> "even.json"
                     else -> "odd.json"
                 }
             }
@@ -61,14 +61,24 @@ class MainActivity : AppCompatActivity() {
                 Log.i("Json Parsing", it.toString())
                 userClasses.add(it)
             }
-            userClasses.add(Classes("Marian", "Advanced Data Structures", false, "13:00", "Friday", "032"))
+            userClasses.add(
+                Classes(
+                    "Marian",
+                    "Advanced Data Structures",
+                    false,
+                    "13:00",
+                    "Friday",
+                    "032"
+                )
+            )
             val jsonString: String = jsonAdapter.toJson(userClasses)
             saveJson(TAB_VIEWED, jsonString)
         }
     }
 
     private fun saveJson(week: String, json: String) {
-        val sharedPreferences = this.getSharedPreferences(CLASS_PREFFERENCE,
+        val sharedPreferences = this.getSharedPreferences(
+            CLASS_PREFFERENCE,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
@@ -76,7 +86,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadJson(week: String, context: Context?): String {
-        val sharedPreferences = context?.getSharedPreferences(CLASS_PREFFERENCE,
+        val sharedPreferences = context?.getSharedPreferences(
+            CLASS_PREFFERENCE,
             Context.MODE_PRIVATE
         )
         return sharedPreferences?.getString(week, "null").toString()

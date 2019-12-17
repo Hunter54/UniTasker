@@ -50,7 +50,7 @@ class WeekFragment : Fragment() {
         TAB_VIEWED = if (selectedPage == 0) {
             "odd.json"
 
-        }else {
+        } else {
             "even.json"
         }
 
@@ -64,8 +64,8 @@ class WeekFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_week, container, false)
 
-        adapter = WeekClassAdapter(userClasses)
         loadUserClasses()
+        adapter = WeekClassAdapter(userClasses)
         binding.rvClassesList.adapter = adapter
 
         return binding.root
@@ -73,10 +73,11 @@ class WeekFragment : Fragment() {
 
     private var listener: SharedPreferences.OnSharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            Log.d("Shared Prefference", "Calling Shared Prefference Change Listener "+key)
+            Log.d("Shared Prefference", "Calling Shared Prefference Change Listener " + key)
             if (key == TAB_VIEWED) {
                 userClasses.clear()
                 loadUserClasses()
+                adapter.setItems(userClasses)
                 adapter.notifyDataSetChanged()
             }
 
@@ -86,7 +87,9 @@ class WeekFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d("Json Parsing", "Entering Json parsing test")
-        loadUserClasses()
+        if (loadUserClasses()) {
+            adapter.setItems(userClasses)
+        }
         context?.getSharedPreferences(CLASS_PREFFERENCE, MODE_PRIVATE)
             ?.registerOnSharedPreferenceChangeListener(listener)
     }
@@ -95,16 +98,20 @@ class WeekFragment : Fragment() {
         super.onPause()
         context?.getSharedPreferences(CLASS_PREFFERENCE, MODE_PRIVATE)
             ?.unregisterOnSharedPreferenceChangeListener(listener)
-        userClasses.clear()
 
     }
 
-    private fun loadUserClasses() {
+    private fun loadUserClasses(): Boolean {
         val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, context))
-        classes?.forEach {
-            Log.i("Json Parsing", it.toString())
-            userClasses.add(it)
-            adapter.notifyDataSetChanged()
+        if (classes?.size ?: 0 != userClasses.size) {
+            userClasses.clear()
+            classes?.forEach {
+                Log.i("Json Parsing", it.toString())
+                userClasses.add(it)
+            }
+            return true
+        } else {
+            return false
         }
     }
 

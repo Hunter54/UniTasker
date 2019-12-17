@@ -25,8 +25,9 @@ class WeekClassAdapter(var classes:ArrayList<Classes>): RecyclerView.Adapter<Wee
 
     }
 
-    fun refreshDataSet(){
-
+    fun setItems(newClasses:ArrayList<Classes>){
+        classes=newClasses
+        notifyDataSetChanged()
     }
 
     class ViewHolder(view : View): RecyclerView.ViewHolder(view){
