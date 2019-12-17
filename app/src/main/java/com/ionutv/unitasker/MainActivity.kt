@@ -1,5 +1,6 @@
 package com.ionutv.unitasker
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,11 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
+    private val moshi: Moshi = Moshi.Builder().build()
+    private val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
+    private val jsonAdapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
+    private val CLASS_PREFFERENCE = "class"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -32,8 +38,34 @@ class MainActivity : AppCompatActivity() {
                 else -> "ODD"
             }
         }.attach()
+
+        fab.setOnClickListener {
+            Log.d("FAB Click Listener", "Pressing fab button")
+            val userClasses: ArrayList<Classes> = ArrayList()
+            val classes = jsonAdapter.fromJson(loadJson("odd.json", this))
+            classes?.forEach {
+                Log.d("Json Parsing", it.toString())
+                userClasses.add(it)
+            }
+            userClasses.add(Classes("Pungila", "Operating Systems", false, "13:00", "Friday", "032"))
+            val jsonString: String = jsonAdapter.toJson(userClasses)
+            saveJson("odd.json", jsonString)
+        }
     }
 
+    private fun saveJson(week: String, json: String) {
+        val sharedPreferences = this.getSharedPreferences(CLASS_PREFFERENCE,
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString(week, json).apply()
+    }
 
+    private fun loadJson(week: String, context: Context?): String {
+        val sharedPreferences = context?.getSharedPreferences(CLASS_PREFFERENCE,
+            Context.MODE_PRIVATE
+        )
+        return sharedPreferences?.getString(week, "null").toString()
+    }
 
 }
