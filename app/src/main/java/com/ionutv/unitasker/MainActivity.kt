@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.DataBindingUtil
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ionutv.unitasker.dataClasses.Classes
 import com.ionutv.unitasker.dataClasses.Data
@@ -13,7 +14,6 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val listType = Types.newParameterizedType(List::class.java, Classes::class.java)
     private val jsonAdapter: JsonAdapter<List<Classes>> = moshi.adapter(listType)
     private val CLASS_PREFFERENCE = "class"
-    private val TAB_VIEWED = ""
+    private var TAB_VIEWED = "odd.json"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,17 +41,29 @@ class MainActivity : AppCompatActivity() {
 
         }.attach()
 
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                TAB_VIEWED = when(position){
+                    0->"odd.json"
+                    1->"even.json"
+                    else -> "odd.json"
+                }
+            }
+        })
+
         fab.setOnClickListener {
             Log.d("FAB Click Listener", "Pressing fab button")
             val userClasses: ArrayList<Classes> = ArrayList()
-            val classes = jsonAdapter.fromJson(loadJson("odd.json", this))
+            val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, this))
+
             classes?.forEach {
-                Log.d("Json Parsing", it.toString())
+                Log.i("Json Parsing", it.toString())
                 userClasses.add(it)
             }
-            userClasses.add(Classes("Pungila", "Operating Systems", false, "13:00", "Friday", "032"))
+            userClasses.add(Classes("Marian", "Advanced Data Structures", false, "13:00", "Friday", "032"))
             val jsonString: String = jsonAdapter.toJson(userClasses)
-            saveJson("odd.json", jsonString)
+            saveJson(TAB_VIEWED, jsonString)
         }
     }
 

@@ -47,12 +47,12 @@ class WeekFragment : Fragment() {
 
         selectedPage = arguments?.getInt(ARG_SELECTED_WEEK) ?: 0
 
-        if (selectedPage == 0) {
-            TAB_VIEWED = "odd.json"
-        } else {
-            TAB_VIEWED = "even.json"
-        }
+        TAB_VIEWED = if (selectedPage == 0) {
+            "odd.json"
 
+        }else {
+            "even.json"
+        }
 
     }
 
@@ -102,7 +102,7 @@ class WeekFragment : Fragment() {
     private fun loadUserClasses() {
         val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, context))
         classes?.forEach {
-            Log.d("Json Parsing", it.toString())
+            Log.i("Json Parsing", it.toString())
             userClasses.add(it)
             adapter.notifyDataSetChanged()
         }
