@@ -1,0 +1,18 @@
+[
+  {
+    "professor": "Pungila",
+    "name": "Operating Systems",
+    "type": false,
+    "time": "14:20",
+    "day": "Monday",
+    "room": "033"
+  },
+  {
+    "professor": "Micota",
+    "name": "Programming 3",
+    "type": true,
+    "time": "11:20",
+    "day": "Monday",
+    "room": "A02"
+  }
+]

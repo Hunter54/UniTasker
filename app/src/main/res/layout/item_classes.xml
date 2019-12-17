@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:layout_margin="4dp"
-    android:gravity="center">
-
-    <TextView
-        android:id="@+id/tvclasses"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="class"
-        android:padding="20dp"
-        />
-    <TextView
-        android:id="@+id/tvroom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Room"
-        android:padding="20dp"
-        />
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
+        <TextView
+            android:id="@+id/tvclasses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="class"
+            android:padding="10dp"
+            android:textSize="15sp"
+            />
 
-
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvroom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvclasses"
+            android:padding="10dp"
+            android:text="Room" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
