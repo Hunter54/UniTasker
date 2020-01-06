@@ -8,14 +8,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ionutv.unitasker.dataClasses.Classes
-import com.ionutv.unitasker.dataClasses.Data
 import com.ionutv.unitasker.databinding.ActivityMainBinding
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(),ClassesDialogFragment.OnCompleteListener {
 
     private lateinit var binding: ActivityMainBinding
     private val moshi: Moshi = Moshi.Builder().build()
@@ -54,26 +54,40 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             Log.d("FAB Click Listener", "Pressing fab button")
-            val userClasses: ArrayList<Classes> = ArrayList()
+            displayDialog()
+//            val userClasses: ArrayList<Classes> = ArrayList()
+//            val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, this))
+//
+//            classes?.forEach {
+//                Log.i("Json Parsing", it.toString())
+//                userClasses.add(it)
+//            }
+//            userClasses.add(
+//                Classes(
+//                    "Marian",
+//                    "Advanced Data Structures",
+//                    false,
+//                    "13:00",
+//                    "Friday",
+//                    "032"
+//                )
+//            )
+//            val jsonString: String = jsonAdapter.toJson(userClasses)
+//            saveJson(TAB_VIEWED, jsonString)
+        }
+    }
+
+    override fun onComplete(clas: Classes) {
+        val userClasses: ArrayList<Classes> = ArrayList()
             val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, this))
 
             classes?.forEach {
                 Log.i("Json Parsing", it.toString())
                 userClasses.add(it)
             }
-            userClasses.add(
-                Classes(
-                    "Marian",
-                    "Advanced Data Structures",
-                    false,
-                    "13:00",
-                    "Friday",
-                    "032"
-                )
-            )
+            userClasses.add(clas)
             val jsonString: String = jsonAdapter.toJson(userClasses)
             saveJson(TAB_VIEWED, jsonString)
-        }
     }
 
     private fun saveJson(week: String, json: String) {
@@ -92,5 +106,7 @@ class MainActivity : AppCompatActivity() {
         )
         return sharedPreferences?.getString(week, "null").toString()
     }
-
+    private fun displayDialog(){
+        ClassesDialogFragment.display(supportFragmentManager)
+    }
 }
