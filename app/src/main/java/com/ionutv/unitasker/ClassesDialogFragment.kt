@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.chip.Chip
 import com.ionutv.unitasker.dataClasses.Classes
 import com.ionutv.unitasker.databinding.DialogLayoutBinding
+import java.time.DayOfWeek
 
 
 class ClassesDialogFragment : DialogFragment() {
@@ -19,7 +21,7 @@ class ClassesDialogFragment : DialogFragment() {
 
 
     interface OnCompleteListener {
-        fun onComplete(clas :Classes)
+        fun onComplete(clas: Classes,week:String)
     }
 
     private var mListener: OnCompleteListener? = null
@@ -36,9 +38,10 @@ class ClassesDialogFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         val dialog = dialog
-        if(dialog!=null){
-            dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-        }
+        if (dialog != null) dialog.window!!.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
     }
 
     override fun onCreateView(
@@ -47,19 +50,110 @@ class ClassesDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_layout, container, false)
-
+        var error: Boolean = false
+        var triggered = 0
+        var dayOfWeek = ""
+        var classType = true
+        var week = ""
+        var name = ""
+        var room = ""
+        var time = ""
+        var teacher = ""
 
         binding.toolbar.setNavigationOnClickListener { dismiss() }
         binding.toolbar.title = "Add classes"
 
         binding.dayChoiceChipGroup.setOnCheckedChangeListener { group, checkedId ->
-            Toast.makeText(context, checkedId.toString(),Toast.LENGTH_LONG).show()
+            val chip: Chip? = view?.findViewById(checkedId)
+            dayOfWeek = chip?.text.toString()
+        }
+
+        binding.classChoiceChipGroup.setOnCheckedChangeListener { group, checkedId ->
+            val chip: Chip? = view?.findViewById(checkedId)
+            classType = chip?.text.toString() == "Course"
+            triggered = 1
+        }
+
+        binding.weekChoiceChipGroup.setOnCheckedChangeListener { group, checkedId ->
+            val chip: Chip? = view?.findViewById(checkedId)
+            week = chip?.text.toString()
         }
 
         binding.cancelButton.setOnClickListener {
             this.dismiss()
         }
-        binding.saveButton.setOnClickListener {  }
+        binding.saveButton.setOnClickListener {
+            when {
+                dayOfWeek == "" -> {
+                    Toast.makeText(
+                        context,
+                        "Please select a day of the week",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error = true
+                }
+                triggered == 0 -> {
+                    Toast.makeText(
+                        context,
+                        "Please select a type of class",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error = true
+                }
+                week == "" -> {
+                    Toast.makeText(
+                        context,
+                        "Please select an even or odd week",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error = true
+                }
+
+            }
+            if(error){
+                error=false
+                return@setOnClickListener
+            }
+            name = binding.nameTextInput.text.toString()
+            room = binding.roomTextInput.text.toString()
+            time = binding.timeTextInput.text.toString()
+            teacher = binding.teacherTextInput.text.toString()
+            when {
+                name == "" -> {
+                    Toast.makeText(
+                        context,
+                        "Please enter a class name",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error = true
+                }
+                room == "" -> {
+                    Toast.makeText(
+                        context,
+                        "Please enter the room",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error = true
+                }
+                time == "" -> {
+
+                    Toast.makeText(
+                        context,
+                        "Please enter time of the class",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    error = true
+                }
+            }
+
+            if(error){
+                error=false
+                return@setOnClickListener
+            }
+
+            this.mListener?.onComplete(Classes(teacher,name,classType,time,dayOfWeek,room),week)
+            this.dismiss()
+        }
 
         return binding.root
     }

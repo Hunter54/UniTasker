@@ -13,9 +13,10 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.android.synthetic.main.activity_main.*
+import java.time.DayOfWeek
 
 
-class MainActivity : AppCompatActivity(),ClassesDialogFragment.OnCompleteListener {
+class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListener {
 
     private lateinit var binding: ActivityMainBinding
     private val moshi: Moshi = Moshi.Builder().build()
@@ -55,39 +56,52 @@ class MainActivity : AppCompatActivity(),ClassesDialogFragment.OnCompleteListene
         fab.setOnClickListener {
             Log.d("FAB Click Listener", "Pressing fab button")
             displayDialog()
-//            val userClasses: ArrayList<Classes> = ArrayList()
-//            val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, this))
-//
-//            classes?.forEach {
-//                Log.i("Json Parsing", it.toString())
-//                userClasses.add(it)
-//            }
-//            userClasses.add(
-//                Classes(
-//                    "Marian",
-//                    "Advanced Data Structures",
-//                    false,
-//                    "13:00",
-//                    "Friday",
-//                    "032"
-//                )
-//            )
-//            val jsonString: String = jsonAdapter.toJson(userClasses)
-//            saveJson(TAB_VIEWED, jsonString)
         }
     }
 
-    override fun onComplete(clas: Classes) {
-        val userClasses: ArrayList<Classes> = ArrayList()
-            val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, this))
+    override fun onComplete(clas: Classes, week: String) {
 
+        val chosenWeek = when (week) {
+            "Odd week" -> "odd.json"
+            "Even week" -> "even.json"
+            else -> "both"
+        }
+
+        if (chosenWeek == "both") {
+            for (i in arrayOf("odd.json", "even.json")) {
+                val userClasses: ArrayList<Classes> = ArrayList()
+                val classes = jsonAdapter.fromJson(loadJson(i, this))
+                classes?.forEach {
+                    Log.i("Json Parsing", it.toString())
+                    userClasses.add(it)
+                }
+                userClasses.add(clas)
+
+                val sortedUserClasses = userClasses.sortedWith(
+                    compareBy({ DayOfWeek.valueOf(it.day.toUpperCase()) },
+                        { it.time.split(":")[0].toInt() })
+                )
+
+                val jsonString: String = jsonAdapter.toJson(sortedUserClasses)
+                saveJson(i, jsonString)
+            }
+        } else {
+            val userClasses: ArrayList<Classes> = ArrayList()
+            val classes = jsonAdapter.fromJson(loadJson(chosenWeek, this))
             classes?.forEach {
                 Log.i("Json Parsing", it.toString())
                 userClasses.add(it)
             }
             userClasses.add(clas)
-            val jsonString: String = jsonAdapter.toJson(userClasses)
-            saveJson(TAB_VIEWED, jsonString)
+
+            val sortedUserClasses = userClasses.sortedWith(
+                compareBy({ DayOfWeek.valueOf(it.day.toUpperCase()) },
+                    { it.time.split(":")[0].toInt() })
+            )
+
+            val jsonString: String = jsonAdapter.toJson(sortedUserClasses)
+            saveJson(chosenWeek, jsonString)
+        }
     }
 
     private fun saveJson(week: String, json: String) {
@@ -106,7 +120,8 @@ class MainActivity : AppCompatActivity(),ClassesDialogFragment.OnCompleteListene
         )
         return sharedPreferences?.getString(week, "null").toString()
     }
-    private fun displayDialog(){
+
+    private fun displayDialog() {
         ClassesDialogFragment.display(supportFragmentManager)
     }
 }

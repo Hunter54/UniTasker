@@ -191,7 +191,7 @@
                         android:hint="A03"
                         android:inputType="text"
                         android:lines="1"
-                        android:maxLength="20"
+                        android:maxLength="4"
                         android:maxLines="1" />
 
 
@@ -208,7 +208,7 @@
                         android:layout_height="match_parent"
                         android:hint="10:20"
                         android:inputType="time"
-                        android:maxLength="10" />
+                        android:maxLength="5" />
 
                 </LinearLayout>
 
