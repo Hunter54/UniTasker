@@ -65,7 +65,7 @@ class WeekFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_week, container, false)
 
         loadUserClasses()
-        adapter = WeekClassAdapter(userClasses)
+        adapter = WeekClassAdapter(userClasses,context!!,TAB_VIEWED)
         binding.rvClassesList.adapter = adapter
 
         return binding.root
@@ -96,8 +96,8 @@ class WeekFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        context?.getSharedPreferences(CLASS_PREFFERENCE, MODE_PRIVATE)
-            ?.unregisterOnSharedPreferenceChangeListener(listener)
+//        context?.getSharedPreferences(CLASS_PREFFERENCE, MODE_PRIVATE)
+//            ?.unregisterOnSharedPreferenceChangeListener(listener)
 
     }
 

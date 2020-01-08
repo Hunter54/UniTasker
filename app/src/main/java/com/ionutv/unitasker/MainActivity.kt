@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(main_toolbar)
 
 
         binding.viewPager.adapter = ViewPagerAdapter(this)
@@ -59,9 +59,9 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
         }
     }
 
-    override fun onComplete(clas: Classes, week: String) {
+    override fun onSavePress(clas: Classes) {
 
-        val chosenWeek = when (week) {
+        val chosenWeek = when (clas.week) {
             "Odd week" -> "odd.json"
             "Even week" -> "even.json"
             else -> "both"
@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
                     Log.i("Json Parsing", it.toString())
                     userClasses.add(it)
                 }
+
                 userClasses.add(clas)
 
                 val sortedUserClasses = userClasses.sortedWith(
@@ -104,6 +105,48 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
         }
     }
 
+    override fun onUpdatePress(clas: Classes, id: Int, oldweek: String) {
+        onDeletePress(id,oldweek)
+
+        onSavePress(clas)
+    }
+
+    override fun onDeletePress(id: Int, oldweek: String) {
+        val chosenWeek = when (oldweek) {
+            "Odd week" -> "odd.json"
+            "Even week" -> "even.json"
+            else -> "both"
+        }
+
+        if (chosenWeek == "both") {
+            for (i in arrayOf("odd.json", "even.json")) {
+                val userClasses: ArrayList<Classes> = ArrayList()
+                val classes = jsonAdapter.fromJson(loadJson(i, this))
+                classes?.forEach {
+                    Log.i("Json Parsing", it.toString())
+                    userClasses.add(it)
+                }
+
+                userClasses.removeIf { it.id == id }
+
+                val jsonString: String = jsonAdapter.toJson(userClasses)
+                saveJson(i, jsonString)
+            }
+        } else {
+            val userClasses: ArrayList<Classes> = ArrayList()
+            val classes = jsonAdapter.fromJson(loadJson(chosenWeek, this))
+            classes?.forEach {
+                Log.i("Json Parsing", it.toString())
+                userClasses.add(it)
+            }
+
+            userClasses.removeIf { it.id == id }
+
+            val jsonString: String = jsonAdapter.toJson(userClasses)
+            saveJson(chosenWeek, jsonString)
+        }
+    }
+
     private fun saveJson(week: String, json: String) {
         val sharedPreferences = this.getSharedPreferences(
             CLASS_PREFFERENCE,
@@ -125,3 +168,5 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
         ClassesDialogFragment.display(supportFragmentManager)
     }
 }
+
+

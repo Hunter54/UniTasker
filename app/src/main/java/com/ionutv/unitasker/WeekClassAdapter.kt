@@ -1,13 +1,16 @@
 package com.ionutv.unitasker
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.ionutv.unitasker.dataClasses.Classes
 import kotlinx.android.synthetic.main.item_classes.view.*
 
-class WeekClassAdapter(var classes: ArrayList<Classes>) :
+
+class WeekClassAdapter(var classes: ArrayList<Classes>, private val context: Context, private val week_viewed: String) :
     RecyclerView.Adapter<WeekClassAdapter.ViewHolder>() {
 
 
@@ -22,7 +25,7 @@ class WeekClassAdapter(var classes: ArrayList<Classes>) :
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(classes[position])
+        holder.bind(classes[position],context,week_viewed)
 
     }
 
@@ -33,14 +36,21 @@ class WeekClassAdapter(var classes: ArrayList<Classes>) :
 
 
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val clas = view.tvclasses
-        private val room = view.tvroom
-        private val day = view.tvdayofweek
-        private val time = view.tvtime
+        private val clas = itemView.tvclasses
+        private val room = itemView.tvroom
+        private val day = itemView.tvdayofweek
+        private val time = itemView.tvtime
 
-        fun bind(userClass: Classes) {
+
+
+        fun bind(userClass: Classes, context: Context, week_viewed: String) {
+
+            itemView.setOnClickListener {
+                val p = layoutPosition
+                ClassesDialogFragment.display((context as AppCompatActivity).supportFragmentManager,userClass,week_viewed)
+            }
             clas.text = userClass.name
             room.text = userClass.room
             day.text = userClass.day
