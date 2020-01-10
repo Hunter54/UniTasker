@@ -22,6 +22,7 @@ class WeekClassAdapter(var classes: ArrayList<Classes>, private val context: Con
 
         LayoutInflater.from(parent.context).inflate(R.layout.item_classes, parent, false)
 
+
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -42,6 +43,7 @@ class WeekClassAdapter(var classes: ArrayList<Classes>, private val context: Con
         private val room = itemView.tvroom
         private val day = itemView.tvdayofweek
         private val time = itemView.tvtime
+        private val style = itemView.tvstyle
 
 
 
@@ -50,6 +52,14 @@ class WeekClassAdapter(var classes: ArrayList<Classes>, private val context: Con
             itemView.setOnClickListener {
                 val p = layoutPosition
                 ClassesDialogFragment.display((context as AppCompatActivity).supportFragmentManager,userClass,week_viewed)
+            }
+            if(userClass.type){
+                style.text = "Course"
+                clas.setBackgroundResource(R.drawable.tv_rounded_course)
+            }
+            else{
+                clas.setBackgroundResource(R.drawable.tv_rounder_labs)
+                style.text = "Lab/Seminar"
             }
             clas.text = userClass.name
             room.text = userClass.room
