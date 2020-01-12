@@ -295,12 +295,15 @@ class ClassesDialogFragment : DialogFragment() {
                 error = false
                 return@setOnClickListener
             }
+
             var idclass = context!!.getSharedPreferences("id", Context.MODE_PRIVATE).getInt("id", 0)
+
             this.mListener?.onSavePress(
                 Classes(idclass, week, teacher, name, classType, time, dayOfWeek, room)
             )
             context!!.getSharedPreferences("id", Context.MODE_PRIVATE).edit()
                 .putInt("id", ++idclass).apply()
+
             this.dismiss()
         }
     }

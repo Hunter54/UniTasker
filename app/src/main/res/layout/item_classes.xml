@@ -55,7 +55,7 @@
             android:layout_width="2dp"
             android:layout_height="70dp"
             android:background="#c0c0c0"
-            android:padding="10dp"
+            android:layout_marginTop="10dp"
             android:layout_below="@id/tvclasses"
             android:layout_alignEnd="@id/tvtime"/>
 
