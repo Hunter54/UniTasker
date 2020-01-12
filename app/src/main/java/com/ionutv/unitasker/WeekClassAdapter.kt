@@ -44,6 +44,7 @@ class WeekClassAdapter(var classes: ArrayList<Classes>, private val context: Con
         private val day = itemView.tvdayofweek
         private val time = itemView.tvtime
         private val style = itemView.tvstyle
+        private val teacher = itemView.tvteacher
 
 
 
@@ -65,6 +66,7 @@ class WeekClassAdapter(var classes: ArrayList<Classes>, private val context: Con
             room.text = userClass.room
             day.text = userClass.day
             time.text = userClass.time
+            teacher.text = userClass.teacher
         }
     }
 }

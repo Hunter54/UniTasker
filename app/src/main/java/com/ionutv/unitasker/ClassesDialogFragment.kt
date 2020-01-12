@@ -61,6 +61,7 @@ class ClassesDialogFragment : DialogFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_layout, container, false)
 
         if (clas != null) {
+            binding.dialogToolbar.title = "Update classes"
             val auxweek = week
             val auxid=idclas
             binding.dialogToolbar.inflateMenu(R.menu.delete_button)
@@ -113,10 +114,11 @@ class ClassesDialogFragment : DialogFragment() {
         }
         else{
             addSaveButtonClickListener()
+            binding.dialogToolbar.title = "Add classes"
         }
 
         binding.dialogToolbar.setNavigationOnClickListener { dismiss() }
-        binding.dialogToolbar.title = "Add classes"
+
 
 
         addChipGroupClickListener()

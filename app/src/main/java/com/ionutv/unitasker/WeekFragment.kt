@@ -94,13 +94,6 @@ class WeekFragment : Fragment() {
             ?.registerOnSharedPreferenceChangeListener(listener)
     }
 
-    override fun onPause() {
-        super.onPause()
-//        context?.getSharedPreferences(CLASS_PREFFERENCE, MODE_PRIVATE)
-//            ?.unregisterOnSharedPreferenceChangeListener(listener)
-
-    }
-
     private fun loadUserClasses(): Boolean {
         val classes = jsonAdapter.fromJson(loadJson(TAB_VIEWED, context))
         if (classes?.size ?: 0 != userClasses.size) {
@@ -113,6 +106,12 @@ class WeekFragment : Fragment() {
         } else {
             return false
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        context?.getSharedPreferences(CLASS_PREFFERENCE, MODE_PRIVATE)
+            ?.unregisterOnSharedPreferenceChangeListener(listener)
     }
 
     private fun saveJson(week: String, json: String) {

@@ -2,26 +2,26 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="150dp"
     android:layout_margin="4dp"
     android:orientation="vertical"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="10dp">
 
     <RelativeLayout
         android:id="@+id/card_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp">
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp">
 
         <TextView
             android:id="@+id/tvclasses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="5dp"
             android:text="class"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -30,20 +30,45 @@
 
         <TextView
             android:id="@+id/tvroom"
-            android:layout_width="150dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvclasses"
             android:padding="10dp"
+            android:gravity="center_vertical|center_horizontal"
             android:textSize="15sp"
+            android:textStyle="bold"
             android:text="Room" />
+
+        <TextView
+            android:id="@+id/tvtime"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tvdayofweek"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="time" />
+
+        <View
+            android:id="@+id/vertical_line"
+            android:layout_width="2dp"
+            android:layout_height="70dp"
+            android:background="#c0c0c0"
+            android:padding="10dp"
+            android:layout_below="@id/tvclasses"
+            android:layout_alignEnd="@id/tvtime"/>
+
         <TextView
             android:id="@+id/tvstyle"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvclasses"
-            android:padding="10dp"
+            android:paddingTop="10dp"
             android:textSize="15sp"
+            android:layout_alignStart="@id/vertical_line"
             android:layout_alignParentEnd="true"
+            android:gravity="center_vertical|center_horizontal"
             android:text="Type"/>
 
         <TextView
@@ -51,18 +76,23 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvroom"
-            android:padding="10dp"
+            android:paddingTop="2dp"
+            android:gravity="center_vertical|center_horizontal"
             android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@id/vertical_line"
             android:text="day" />
 
         <TextView
-            android:id="@+id/tvtime"
-            android:layout_width="150dp"
+            android:id="@+id/tvteacher"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tvdayofweek"
-            android:layout_alignParentEnd="true"
-            android:padding="10dp"
             android:textSize="15sp"
-            android:text="time" />
+            android:layout_below="@id/vertical_line"
+            android:layout_alignParentBottom="true"
+            android:text="teacher"
+            android:gravity="center_horizontal|center_vertical"/>
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
