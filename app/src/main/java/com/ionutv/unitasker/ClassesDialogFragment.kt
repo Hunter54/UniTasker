@@ -70,7 +70,7 @@ class ClassesDialogFragment : DialogFragment() {
                 when (it.itemId) {
                     R.id.delete -> {
                         this.mListener?.onDeletePress(idclas, auxweek)
-                        Toast.makeText(context, "Pressed delete icon button", Toast.LENGTH_LONG)
+                        Toast.makeText(context, "Class deleted", Toast.LENGTH_LONG)
                             .show()
                         this.dismiss()
                         true
@@ -115,6 +115,13 @@ class ClassesDialogFragment : DialogFragment() {
         else{
             addSaveButtonClickListener()
             binding.dialogToolbar.title = "Add classes"
+            binding.weekChoiceChipGroup.check(
+                when(week){
+                    "Odd week" -> R.id.week_choice_chip1
+                    "Even week" -> R.id.week_choice_chip2
+                    else -> R.id.week_choice_chip3
+                }
+            )
         }
 
         binding.dialogToolbar.setNavigationOnClickListener { dismiss() }
@@ -326,6 +333,7 @@ class ClassesDialogFragment : DialogFragment() {
             week: String = ""
         ): ClassesDialogFragment {
             val exampleDialog = ClassesDialogFragment()
+            exampleDialog.week=week
             clas?.let {
                 exampleDialog.week = clas.week
                 exampleDialog.clas = clas

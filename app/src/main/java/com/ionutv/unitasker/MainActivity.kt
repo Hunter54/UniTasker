@@ -30,6 +30,15 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(main_toolbar)
 
+        val tabPosition = this.getSharedPreferences(
+            "TAB_VIEWED",
+            Context.MODE_PRIVATE
+        ).getInt("week", 0)
+
+        when(tabPosition){
+            0 -> TAB_VIEWED="odd.json"
+            1 -> TAB_VIEWED="even.json"
+        }
 
         binding.viewPager.adapter = ViewPagerAdapter(this)
 
@@ -40,11 +49,14 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
                 else -> "ODD"
             }
 
+            binding.viewPager.setCurrentItem(tabPosition,true)
+
         }.attach()
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                Log.d("Page Change Listener", "Changed tab page")
                 TAB_VIEWED = when (position) {
                     0 -> "odd.json"
                     1 -> "even.json"
@@ -56,6 +68,14 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
         fab.setOnClickListener {
             Log.d("FAB Click Listener", "Pressing fab button")
             displayDialog()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        when (TAB_VIEWED) {
+            "odd.json" -> this.getSharedPreferences("TAB_VIEWED", Context.MODE_PRIVATE).edit().putInt("week",0).apply()
+            "even.json" -> this.getSharedPreferences("TAB_VIEWED", Context.MODE_PRIVATE).edit().putInt("week",1).apply()
         }
     }
 
@@ -165,7 +185,10 @@ class MainActivity : AppCompatActivity(), ClassesDialogFragment.OnCompleteListen
     }
 
     private fun displayDialog() {
-        ClassesDialogFragment.display(supportFragmentManager)
+        when(TAB_VIEWED){
+            "odd.json" -> ClassesDialogFragment.display(supportFragmentManager,week = "Odd week")
+            "even.json" -> ClassesDialogFragment.display(supportFragmentManager,week = "Even week")
+        }
     }
 }
 
